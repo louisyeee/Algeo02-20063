@@ -20,3 +20,9 @@ oriWidth, oriHeight = originalImage.size
 
 # Menghasilkan ukuran asli dari Image
 oriImageSize = oriWidth * oriHeight * 3
+
+# Menerima rasio pengurangan ukuran yang diinginkan user
+ratio = int(input("Masukkan ratio pengurangan: "))
+
+# Menentukan limit SVD
+limitSVD = round(oriImageSize * ratio / 100 / (1+oriWidth+oriHeight) / 3)
