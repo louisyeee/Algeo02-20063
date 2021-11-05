@@ -1,6 +1,7 @@
 import numpy as np
 import sympy as sym
-from typing import Union
+
+epsilon = 0.000000001
 
 
 def eigenmatrix(A: sym.Matrix, egv: sym.Float) -> sym.Matrix:
@@ -18,7 +19,14 @@ def eigenvalue_list(A: sym.Matrix) -> np.array:
     Z = egv * I - A
     char_eq = sym.det(Z)
     soln = np.array(sym.solve(char_eq, egv))
-    soln = np.sort(soln)[::-1]
+
+    try:
+        soln = np.sort(soln)[::-1]
+    except:
+        for i in range(len(soln)):
+            soln[i] = sym.re(sym.N(soln[i]))
+        soln = np.sort(soln)[::-1]
+
     return soln
 
 
@@ -48,14 +56,12 @@ def singular_matrix(A: sym.Matrix) -> sym.Matrix:
     egv_list = eigenvalue_list(A)
 
     for egv in egv_list:
-        print()
         Z = eigenmatrix(A, egv)
-        Z = Z.rref()[0]
+        Z = rref(Z)
         Z = delete_zero_row(Z)
-        print(Z)
 
         soln = []
-        paramlist = []  # list of index of parameters
+        paramlist = [i for i in range(Z.cols)]  # list of index of parameters
         sublist = []    # list of substitution tuples
 
         # Setup variable list [x1, x2, x3, ...]
@@ -68,14 +74,13 @@ def singular_matrix(A: sym.Matrix) -> sym.Matrix:
         for i in range(Z.rows):
             foundOne = False
             for j in range(Z.cols):
-                if not foundOne and Z[i, j] == 1:
+                if not foundOne and abs(Z[i, j] - 1) < epsilon:
                     foundOne = True
                     indexOne = j
                     soln[indexOne] = 0
-                elif foundOne and Z[i,j] != 0:
+                    paramlist.remove(indexOne)
+                elif foundOne and abs(Z[i,j]) > epsilon:
                     soln[indexOne] -= Z[i, j] * soln[j]
-                    if j not in paramlist:
-                        paramlist.append(j)
 
         # sublist = [(x2,0), (x3,0), ...]
         for idx in paramlist:
@@ -123,3 +128,104 @@ def delete_zero_row(A: sym.Matrix) -> sym.Matrix:
             A.row_del(i)
             i -= 1
     return A
+
+
+# Tidak menggunakan sympy.rref() dengan tujuan
+# modifikasi ketelitian saat melakukan OBE
+def rref(A: sym.Matrix) -> sym.Matrix:
+    return sym.Matrix(row_echelon_top(row_echelon_bottom(np.matrix(A, 'float'))))
+
+
+# Membentuk matriks eselon baris
+def row_echelon_bottom(A: np.matrix) -> np.matrix:
+    A = np.array(A, 'float')
+    row, col = A.shape
+
+    # Basis: matriks kosong adalah eselon
+    if row == 0 or col == 0:
+        return np.matrix(A)
+
+    # Rekursi: matriks berisi memiliki "head" dan "tail",
+    #          tail akan dimodifikasi sesuai head
+    else:
+        allZero, nonZeroIdx = True, 0      # Seluruh kolom pertama 0
+        for i in range(row):
+            if abs(A[i,0]) >= epsilon:
+                allZero = False
+                nonZeroIdx = i
+                break
+
+        if allZero:
+            B = row_echelon_bottom(A[:, 1:])
+            return np.matrix(np.hstack([A[:, :1], B]))
+
+        else:
+            # Menukar baris yang depannya bukan nol ke atas
+            if nonZeroIdx != 0:
+                temp = A[nonZeroIdx].copy()
+                A[nonZeroIdx] = A[0]
+                A[0] = temp
+
+            A[0] = A[0] / A[0,0]
+            for i in range(1, row):
+                first_head = A[i,0]
+                for j in range(col):
+                    A[i,j] -= A[0,j] * first_head
+                    if abs(A[i,j]) < epsilon:
+                        A[i,j] = 0
+
+            # Contoh:
+            #      1   2 3  A[:1]
+            #      _ . _ _
+            #      0 | 3 8
+            #      0 | 7 2
+            # A[1:,:1]  B
+            B = row_echelon_bottom(A[1:,1:])
+            return np.matrix(np.vstack([A[:1], np.hstack([A[1:,:1], B])]))
+
+
+# Menghasilkan matriks eselon baris tereduksi dari
+# matriks eselon baris
+def row_echelon_top(A: np.matrix) -> np.matrix:
+    A = np.array(A, 'float')
+    row, col = A.shape
+
+    # Basis: matriks kosong adalah eselon
+    if row == 0 or col == 0:
+        return np.matrix(A)
+
+    # Rekursi: matriks berisi memiliki "head" dan "tail",
+    #          tail akan dimodifikasi sesuai head
+    else:
+        allZero = True     # Seluruh baris terakhir 0
+        for j in range(col-1, -1, -1):
+            if abs(A[-1, j]) >= epsilon:
+                allZero = False
+                break
+
+        if allZero:
+            B = row_echelon_top(A[:-1, :])
+            return np.matrix(np.vstack([B, A[-1:]]))
+
+        else:
+            oneColIdx = -1
+            for j in range(col):
+                if abs(A[-1,j] - 1) < epsilon:
+                    oneColIdx = j
+                    break
+
+            for i in range(row-1):
+                first_head = A[i,oneColIdx]
+                for j in range(oneColIdx, col):
+                    A[i,j] -= A[-1,j] * first_head
+                    if abs(A[i,j]) < epsilon:
+                        A[i,j] = 0
+
+            # Contoh:
+            #     B
+            #    1 2 0 2
+            #    0 1 0 1
+            #    _ _ _ _
+            #    0 0 1 3  A[-1:]
+            B = np.array(row_echelon_top(A[:-1,:]))
+            return np.matrix(np.vstack([B, A[-1:]]))
