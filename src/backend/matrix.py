@@ -19,7 +19,7 @@ def svd(A: np.matrix) -> (np.matrix, np.matrix, np.matrix):
         S[i, i] = np.sqrt(egv)
 
     for i in range(len(egv_list)):
-        U[:,i] = np.dot(A, V[:,i])/S[i,i]
+        U[:, i] = np.dot(A, V[:, i])/S[i, i]
 
     Vt = np.transpose(V)
 
@@ -31,14 +31,13 @@ def svd(A: np.matrix) -> (np.matrix, np.matrix, np.matrix):
 def eigen(A: np.matrix) -> (np.array, np.matrix):
     accuracy_level = 3
     K = np.identity(A.shape[0])
-    A = hessenberg(A)
 
     for i in range(accuracy_level):
         Q, R = np.linalg.qr(A)
         K = np.matmul(K, Q)
         A = np.matmul(R, Q)
 
-    soln = [abs(A[i,i]) for i in range(len(A))]
+    soln = [abs(A[i, i]) for i in range(len(A))]
 
     for i in range(len(soln)):
         if soln[i] < 0.00001:

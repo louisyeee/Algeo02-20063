@@ -14,9 +14,9 @@ def openImage(imagePath):  # Fungsi untuk membuka file image dan menghasilkan ma
 
 
 def createColorMatrix(m1, m2, m3, limitSVD):
-    #     m1 = m1[:, :limitSVD]
-    #     m2 = m2[:limitSVD, :limitSVD]
-    #     m3 = m3[:limitSVD, :]
+    m1 = m1[:, :limitSVD]
+    m2 = m2[:limitSVD, :limitSVD]
+    m3 = m3[:limitSVD, :]
     m2 = np.matmul(m1, m2)
     m3 = np.matmul(m2, m3)
     m3 = m3.astype('uint8')
@@ -37,8 +37,7 @@ ratio = float(input("Masukkan ratio pengurangan: "))
 ratio = 100-ratio
 
 # Menentukan limit SVD
-limitSVD = round(oriImageSize * ratio / 100 / (1+oriWidth+oriHeight) / 3)
-print(limitSVD)
+limitSVD = round(oriImageSize * ratio / 100 / (1+oriWidth+oriHeight) / 3)*2
 # Menghasilkan matriks U, S, V hasil SVD
 URed, SRed, VRed = svd(matrixRed)
 UGreen, SGreen, VGreen = svd(matrixGreen)
