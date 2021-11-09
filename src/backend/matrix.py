@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.linalg import hessenberg
 # import sympy as sym
 
 
@@ -28,15 +29,16 @@ def svd(A: np.matrix) -> (np.matrix, np.matrix, np.matrix):
 # Menghasilkan (eigenvalues, eigenvectors)
 # dengan QR algorithm
 def eigen(A: np.matrix) -> (np.array, np.matrix):
-    accuracy_level = 10
+    accuracy_level = 3
     K = np.identity(A.shape[0])
+    A = hessenberg(A)
 
     for i in range(accuracy_level):
         Q, R = np.linalg.qr(A)
         K = np.matmul(K, Q)
         A = np.matmul(R, Q)
 
-    soln = [A[i,i] for i in range(len(A))]
+    soln = [abs(A[i,i]) for i in range(len(A))]
 
     for i in range(len(soln)):
         if soln[i] < 0.00001:
