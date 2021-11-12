@@ -1,6 +1,7 @@
 import numpy
 from PIL import Image
 from matrix import *
+import time
 
 
 def openImage(imagePath):  # Fungsi untuk membuka file image dan menghasilkan matriks RGB
@@ -25,6 +26,7 @@ def createColorMatrix(m1, m2, m3, limitSVD):
 
 # imagePath = input("Masukkan nama file: ")
 matrixRed, matrixGreen, matrixBlue, originalImage = openImage("lena.png")
+start = time.time()
 originalImage.show()
 # Menghasilkan nilai lebar dan tinggi dari Image
 oriWidth, oriHeight = originalImage.size
@@ -57,3 +59,6 @@ imageBlue = Image.fromarray(finalBlue, mode=None)
 finalImage = Image.merge("RGB", (imageRed, imageGreen, imageBlue))
 
 finalImage.show()
+end = time.time()
+
+print("Waktu program berjalan:", round(end-start, 2), "detik")
