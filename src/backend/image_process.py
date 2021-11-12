@@ -2,6 +2,7 @@ import numpy
 from PIL import Image
 from matrix import *
 import time
+import os
 
 
 def openImage(imagePath):  # Fungsi untuk membuka file image dan menghasilkan matriks RGB
@@ -25,8 +26,9 @@ def createColorMatrix(m1, m2, m3, limitSVD):
 
 
 # imagePath = input("Masukkan nama file: ")
+
 matrixRed, matrixGreen, matrixBlue, originalImage = openImage("lena.png")
-start = time.time()
+
 originalImage.show()
 # Menghasilkan nilai lebar dan tinggi dari Image
 oriWidth, oriHeight = originalImage.size
@@ -36,10 +38,12 @@ oriImageSize = oriWidth * oriHeight * 3
 
 # Menerima rasio pengurangan ukuran yang diinginkan user
 ratio = float(input("Masukkan ratio pengurangan: "))
+start = time.time()
 ratio = 100-ratio
 
 # Menentukan limit SVD
 limitSVD = round(oriImageSize * ratio / 100 / (1+oriWidth+oriHeight) / 3)*2
+
 # Menghasilkan matriks U, S, V hasil SVD
 URed, SRed, VRed = svd(matrixRed)
 UGreen, SGreen, VGreen = svd(matrixGreen)
