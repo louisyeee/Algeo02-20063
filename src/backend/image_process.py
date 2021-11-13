@@ -27,7 +27,8 @@ def createColorMatrix(m1, m2, m3, limitSVD):
 
 # imagePath = input("Masukkan nama file: ")
 
-matrixRed, matrixGreen, matrixBlue, originalImage = openImage("lena.png")
+matrixRed, matrixGreen, matrixBlue, originalImage = openImage(
+    "C:/Users/HP/OneDrive - Institut Teknologi Bandung/SEMS 3/Algeo/Tubes 2/Algeo02-20063/test/lena.png")
 
 originalImage.show()
 # Menghasilkan nilai lebar dan tinggi dari Image
@@ -37,7 +38,7 @@ oriWidth, oriHeight = originalImage.size
 oriImageSize = oriWidth * oriHeight * 3
 
 # Menerima rasio pengurangan ukuran yang diinginkan user
-ratio = float(input("Masukkan ratio pengurangan: "))
+ratio = int(input("Masukkan ratio pengurangan: "))
 start = time.time()
 ratio = 100-ratio
 
@@ -62,7 +63,18 @@ imageBlue = Image.fromarray(finalBlue, mode=None)
 # Menghasilkan image setelah kompres
 finalImage = Image.merge("RGB", (imageRed, imageGreen, imageBlue))
 
+# Menghitung pixel difference ratio
+diffRatio = (oriWidth*limitSVD/2 + limitSVD/2 + limitSVD/2 *
+             oriHeight)/(oriHeight*oriWidth) * 100
+
+
 finalImage.show()
+print("Image pixel difference percentage:", round(diffRatio), "%")
 end = time.time()
+save = input("Do you want to save the image? (y/n) ")
+if save == 'y':
+    finalImage.save('buatTes.png')
+    print("Image saved!!!")
+
 
 print("Waktu program berjalan:", round(end-start, 2), "detik")
