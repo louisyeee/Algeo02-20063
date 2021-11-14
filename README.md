@@ -9,30 +9,30 @@ Kompresiana is a website for image compression using SVD (Singular Value Decompo
 
 # Set up
 
-1. clone this repository
+1. Clone this repository
 
 ```
 git clone https://github.com/louisyeee/Algeo02-20063.git
 ```
 
-2. get into src directory and set up a new virtual environment
+2. Get into *src* folder inside your cloned repository and set up a new virtual environment
 
 ```
 python -m venv ./venv/
 ```
 
-3. activate the new virtual environment
+3. Activate the new virtual environment
 
 ```
 .\venv\Scripts\activate
 ```
 
-4. install the requirements needed
+4. Install the requirements needed
 ```
 pip install -r requirements.txt
 ```
 
-5. run the web
+5. Run the web 
 ```
 flask run
 ```

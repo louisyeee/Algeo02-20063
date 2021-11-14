@@ -46,11 +46,11 @@ body {
 }
 
 .image-box {
-    width:600px;
-    height:600px;
+    width:500px;
+    height:500px;
     background-color: #E5E5E5; 
     margin-top: 50px;
-    margin-bottom: 50px;
+    margin-bottom: 20%;
 }
 
 .input-file::before {
@@ -83,4 +83,8 @@ body {
 img {
     width: 100%;
     height: auto;
+}
+
+input[type=text]:focus {
+    background-color: #DECDC3;
 }

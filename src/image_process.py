@@ -68,4 +68,4 @@ def compress(imagePath,ratio):
     end = time.time()
     runtime = end - start
 
-    return finalImage, diffRatio, runtime
+    return finalImage, round(diffRatio,2), round(runtime,2)
