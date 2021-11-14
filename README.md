@@ -2,9 +2,9 @@
 
 Kompresiana is a website for image compression using SVD (Singular Value Decomposition) algorithm
 
-13520063 - Louis Yanggara
-13520071 - Wesly Giovano
-13520076 - Claudia
+13520063 - Louis Yanggara <br>
+13520071 - Wesly Giovano <br>
+13520076 - Claudia <br>
 
 # Set up
 
