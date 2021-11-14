@@ -2,7 +2,6 @@ import numpy
 from PIL import Image
 from matrix import *
 import time
-import os
 
 
 def openImage(originalImage):  # Fungsi untuk membuka file image dan menghasilkan matriks RGB
@@ -25,7 +24,7 @@ def createColorMatrix(m1, m2, m3, limitSVD):
     return m3
 
 
-def compressx(imagePath,ratio):
+def compress(imagePath,ratio):
 
     matrixRed, matrixGreen, matrixBlue, originalImage = openImage(imagePath)
 
@@ -63,20 +62,10 @@ def compressx(imagePath,ratio):
     finalImage = Image.merge("RGB", (imageRed, imageGreen, imageBlue))
 
     # Menghitung pixel difference ratio
-    diffRatio = (oriWidth*limitSVD/2 + limitSVD/2 + limitSVD/2 *
+    diffRatio = 100 - (oriWidth*limitSVD/2 + limitSVD/2 + limitSVD/2 *
                 oriHeight)/(oriHeight*oriWidth) * 100
 
-    # finalImage.show()
-    # print("Image pixel difference percentage:", round(diffRatio), "%")
     end = time.time()
-
-    #save = input("Do you want to save the image? (y/n) ")
-    #if save == 'y':
-    #    finalImage.save('buatTes.png')
-    #    print("Image saved!!!")
-
     runtime = end - start
-
-    # print("Waktu program berjalan:", round(end-start, 2), "detik")
 
     return finalImage, diffRatio, runtime
