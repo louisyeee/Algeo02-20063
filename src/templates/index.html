@@ -23,6 +23,13 @@
             <div class="input-box">
                 <p><b>Input Your Image</b></p>
                 <input type="file" class="input-file" name="file">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
                 <p>Image Compression Rate : <input type="text" class="input-text" name="rate"> %</p>
                 <input type="submit" formaction="/compress" class="download-button">
             </div>
