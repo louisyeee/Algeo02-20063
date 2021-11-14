@@ -1,7 +1,8 @@
 # Algeo02-20063
 
-Kompresiana is a website for image compression using SVD (Singular Value Decomposition) algorithm
+Kompresiana is a website for image compression using SVD (Singular Value Decomposition) algorithm. This project is made for IF2123 Aljabar Linier dan Geometri by: <br>
 
+**Kelompok 50 Kompresiana** <br>
 13520063 - Louis Yanggara <br>
 13520071 - Wesly Giovano <br>
 13520076 - Claudia <br>
@@ -35,3 +36,9 @@ pip install -r requirements.txt
 ```
 flask run
 ```
+
+# Tech
+
+Frontend : HTML & CSS <br>
+Backend : Python <br>
+Framework : Flask <br>
